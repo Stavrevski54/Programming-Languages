@@ -1,0 +1,29 @@
+public class stringObject {
+  public static void main(String[] args){
+    String myString = "Java Developer";
+    System.out.println("My string is: " + myString);
+    char firstCharacter = myString.charAt(0);
+    System.out.println("Its first character is " + firstCharacter);
+    char lastCharacter = myString.charAt(myString.length() - 1);
+    System.out.println("Its last character is " + lastCharacter);
+    int stringLength = myString.length();
+    char middleCharacter;
+    int middleCharacterIndex;
+    if(stringLength % 2 == 1){
+      middleCharacterIndex = stringLength / 2 + 1;
+      middleCharacter = myString.charAt(middleCharacterIndex - 1);
+    }else{
+      middleCharacterIndex = stringLength / 2;
+      middleCharacter = myString.charAt(middleCharacterIndex);
+    }
+    System.out.println("The middle character is " + middleCharacter);
+    int sumOfChars = firstCharacter + lastCharacter + middleCharacter;
+    System.out.println("The sum of these characters is " + sumOfChars);
+    char biggestCharacter = firstCharacter;
+    if((int)lastCharacter > (int)biggestCharacter)
+      biggestCharacter = lastCharacter;
+    if((int) middleCharacter > (int) biggestCharacter)
+      biggestCharacter = middleCharacter;
+    System.out.println("The biggest character of these three is: " + biggestCharacter + " with code of " + (int)biggestCharacter);
+  }
+}
