@@ -1,0 +1,16 @@
+import java.security.SecureRandom;
+
+public class randomNumber {
+  public static void main(String[] args){
+    SecureRandom generator = new SecureRandom();
+    int upper = 100;
+    double doubleRandom = generator.nextDouble() * upper;
+    System.out.println("From 0 to 100, the computer picked: " + doubleRandom);
+    int inetegerPart = (int)doubleRandom;
+    System.out.println("Integer part of this number is: " + inetegerPart);
+    double decimalPart = doubleRandom - inetegerPart;
+    System.out.println("Decimal part of this number is: " + decimalPart);
+    char charPart = (char)inetegerPart;
+    System.out.println("Character with code " + inetegerPart + " is: " + charPart);
+  }
+}
