@@ -6,16 +6,19 @@ import java.io.*;
 
 public class FileManager {
     public static void main(String[] args) {
-        // Check if the correct number of arguments is provided
+        // Check if the number of arguments is valid
         if (args.length < 2 || args.length > 3) {
             System.out.println("Usage: java FileManager <command> <path> [content]");
             return;
         }
 
+        // Extract the command from the first argument
         String command = args[0];
+
+        // Extract the path from the second argument
         String path = args[1];
 
-        // Switch statement to determine which command was issued
+        // Execute the appropriate command
         switch (command) {
             case "create-file":
                 createFile(path);
@@ -33,7 +36,7 @@ public class FileManager {
                 listFilesAndDirectories(path);
                 break;
             case "write-file":
-                // Check if the write-file command has appropriate arguments
+                // Check if content argument is provided
                 if (args.length != 3) {
                     System.out.println("Usage: java FileManager write-file <path> <content>");
                     return;
@@ -45,7 +48,7 @@ public class FileManager {
                 readFile(path);
                 break;
             default:
-                System.out.println("Invalid command");
+                System.out.println("Invalid command.");
         }
     }
 
@@ -54,9 +57,9 @@ public class FileManager {
         try {
             File file = new File(path);
             if (file.createNewFile()) {
-                System.out.println("File created successfully");
+                System.out.println("File created successfully.");
             } else {
-                System.out.println("File already exists");
+                System.out.println("File already exists.");
             }
         } catch (IOException e) {
             System.out.println("Error creating file: " + e.getMessage());
@@ -67,9 +70,9 @@ public class FileManager {
     private static void deleteFile(String path) {
         File file = new File(path);
         if (file.delete()) {
-            System.out.println("File deleted successfully");
+            System.out.println("File deleted successfully.");
         } else {
-            System.out.println("Failed to delete file. File may not exist or permission issue.");
+            System.out.println("Failed to delete file. Check if the file exists and you have proper permissions.");
         }
     }
 
@@ -77,42 +80,49 @@ public class FileManager {
     private static void createDirectory(String path) {
         File directory = new File(path);
         if (directory.mkdir()) {
-            System.out.println("Directory created successfully");
+            System.out.println("Directory created successfully.");
         } else {
-            System.out.println("Failed to create directory. Directory may already exist or permission issue.");
+            System.out.println("Failed to create directory.");
         }
     }
 
     // Method to delete a directory
     private static void deleteDirectory(String path) {
         File directory = new File(path);
-        if (directory.delete()) {
-            System.out.println("Directory deleted successfully");
+        if (directory.isDirectory()) {
+            if (directory.list().length == 0) {
+                if (directory.delete()) {
+                    System.out.println("Directory deleted successfully.");
+                } else {
+                    System.out.println("Failed to delete directory.");
+                }
+            } else {
+                System.out.println("Directory is not empty. Cannot delete.");
+            }
         } else {
-            System.out.println("Failed to delete directory. Directory may not be empty or permission issue.");
+            System.out.println("Path does not point to a directory.");
         }
     }
 
-    // Method to list files and directories in a directory
+    // Method to list files and directories
     private static void listFilesAndDirectories(String path) {
         File directory = new File(path);
-        File[] files = directory.listFiles();
-        if (files != null) {
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            System.out.println("Files and directories in " + path + ":");
             for (File file : files) {
                 System.out.println(file.getName());
             }
         } else {
-            System.out.println("Invalid directory path");
+            System.out.println("Path does not point to a directory.");
         }
     }
 
     // Method to write content to a file
     private static void writeFile(String path, String content) {
-        try {
-            FileWriter writer = new FileWriter(path);
+        try (FileWriter writer = new FileWriter(path)) {
             writer.write(content);
-            writer.close();
-            System.out.println("Content written to file successfully");
+            System.out.println("Content written to file successfully.");
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e.getMessage());
         }
@@ -120,14 +130,15 @@ public class FileManager {
 
     // Method to read content from a file
     private static void readFile(String path) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
+            System.out.println("Content of file " + path + ":");
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
-            reader.close();
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
     }
+}
+
